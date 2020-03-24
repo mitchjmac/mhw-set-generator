@@ -128,5 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+#SQLite3
+*.sqlite
+
 # MacOS
 .DS_Store
