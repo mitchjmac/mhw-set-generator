@@ -7,30 +7,25 @@ class GameData:
     def __init__(self):
         self._db              = GameData._create_db()
         self._populate_db()
-        self._q_armor_w_skill = GameData._read_sql_file("./sql/query/armor_with_skill.sql")[0]
-        self._q_armor_w_set_b = GameData._read_sql_file("./sql/query/armor_with_set_bonus.sql")[0]
+        self._q_equip_w_skill = GameData._read_sql_file("./sql/query/equip_with_skill.sql")[0]
+        self._q_equip_w_set_b = GameData._read_sql_file("./sql/query/equip_with_set_bonus.sql")[0]
         self._q_set_b_w_skill = GameData._read_sql_file("./sql/query/set_bonus_with_skill.sql")[0]
-        self._q_charm_w_skill = GameData._read_sql_file("./sql/query/charm_with_skill.sql")[0]
 
 
     def __del__(self):
         self._db.close()
 
 
-    def armor_with_skill(self, skill):
-        return self._exec_sql_str(self._q_armor_w_skill, (skill, ))
+    def equip_with_skill(self, skill):
+        return self._exec_sql_str(self._q_equip_w_skill, (skill, ))
 
 
-    def armor_with_set_bonus(self, bonus):
-        return self._exec_sql_str(self._q_armor_w_set_b, (bonus, ))
+    def equip_with_set_bonus(self, bonus):
+        return self._exec_sql_str(self._q_equip_w_set_b, (bonus, ))
 
 
     def set_bonus_with_skill(self, skill):
         return self._exec_sql_str(self._q_set_b_w_skill, (skill, ))
-
-
-    def charm_with_skill(self, skill):
-        return self._exec_sql_str(self._q_charm_w_skill, (skill, ))
 
 
     def armor_most_slots(self, exclude=None):
@@ -94,7 +89,7 @@ class GameData:
                 insert += (p["slots"][0]["rank"] if len(p["slots"]) >= 1 else None, )
                 insert += (p["slots"][1]["rank"] if len(p["slots"]) >= 2 else None, )
                 insert += (p["slots"][2]["rank"] if len(p["slots"]) >= 3 else None, )
-                self._exec_sql_str('INSERT OR IGNORE INTO Armor \
+                self._exec_sql_str('INSERT OR IGNORE INTO Equipment \
                                     VALUES (' + ','.join('?' * len(insert)) + ')', insert)
 
         for c in charm:
@@ -102,9 +97,11 @@ class GameData:
             insert = ()
             insert += (c["id"], )
             insert += (c["name"], )
+            insert += ("charm", )
             insert += (r["skills"][0]["id"], )
             insert += (r["skills"][1]["id"] if len(r["skills"]) >= 2 else None, )
-            self._exec_sql_str('INSERT OR IGNORE INTO Charm \
+            for i in list(range(0,4)): insert += (None, )
+            self._exec_sql_str('INSERT OR IGNORE INTO Equipment \
                                 VALUES (' + ','.join('?' * len(insert)) + ')', insert)
 
         for d in deco:
