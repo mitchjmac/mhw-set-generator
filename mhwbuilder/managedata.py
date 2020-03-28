@@ -5,31 +5,42 @@ import sys
 
 class GameData:
     def __init__(self):
-        self._db              = GameData._create_db()
+        self._db               = GameData._create_db()
         self._populate_db()
-        self._q_equip_w_skill = GameData._read_sql_file("./sql/query/equip_with_skill.sql")[0]
-        self._q_equip_w_set_b = GameData._read_sql_file("./sql/query/equip_with_set_bonus.sql")[0]
-        self._q_set_b_w_skill = GameData._read_sql_file("./sql/query/set_bonus_with_skill.sql")[0]
+        self._q_equip_w_skill  = GameData._read_sql_file("./sql/query/equip_with_skill.sql")[0]
+        self._q_equip_w_set_b  = GameData._read_sql_file("./sql/query/equip_with_set_bonus.sql")[0]
+        self._q_equip_w_type   = GameData._read_sql_file("./sql/query/equip_with_type.sql")[0]
+        self._q_skill_to_set_b = GameData._read_sql_file("./sql/query/skill_to_set_bonus.sql")[0]
+        self._q_all_skill      = GameData._read_sql_file("./sql/query/all_skill.sql")[0]
+        self._q_all_set_b      = GameData._read_sql_file("./sql/query/all_set_bonus.sql")[0]
 
 
     def __del__(self):
         self._db.close()
 
 
-    def equip_with_skill(self, skill):
+    def equipment_with_skill(self, skill):
         return self._exec_sql_str(self._q_equip_w_skill, (skill, ))
 
 
-    def equip_with_set_bonus(self, bonus):
+    def equipment_with_set_bonus(self, bonus):
         return self._exec_sql_str(self._q_equip_w_set_b, (bonus, ))
 
 
-    def set_bonus_with_skill(self, skill):
-        return self._exec_sql_str(self._q_set_b_w_skill, (skill, ))
+    def equipment_with_type(self, e_type):
+        return self._exec_sql_str(self._q_equip_w_type, (e_type, ))
 
 
-    def armor_most_slots(self, exclude=None):
-        return None
+    def skill_to_set_bonus(self):
+        return self._exec_sql_str(self._q_skill_to_set_b)
+
+
+    def skills(self):
+        return self._exec_sql_str(self._q_all_skill)
+
+
+    def set_bonuses(self):
+        return self._exec_sql_str(self._q_all_set_b)
 
 
     def _populate_db(self):
@@ -143,7 +154,7 @@ class GameData:
     def _create_db():
         conn = None
         try:
-            conn   = sqlite3.connect('mhw.sqlite')
+            conn = sqlite3.connect('mhw.sqlite')
         except sqlite3.Error as e:
             sys.exit(e)
         return conn

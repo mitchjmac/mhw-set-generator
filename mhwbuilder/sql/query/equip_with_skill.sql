@@ -1,4 +1,4 @@
-SELECT Equipment.id as e_id, Equipment.name as e_name, Equipment.type as e_type, Equipment.slot_1, Equipment.slot_2, Equipment.slot_3, sk_name1.name as sk1_name, sk_lvl1.level as sk1_level, sk_name2.name as sk2_name, sk_lvl2.level as sk2_level, SetBonus.name as sb_name
+SELECT Equipment.name as e_name, Equipment.type as e_type, Equipment.slot_1, Equipment.slot_2, Equipment.slot_3, sk_name1.name as sk1_name, sk_lvl1.level as sk1_level, sk_name2.name as sk2_name, sk_lvl2.level as sk2_level, SetBonus.name as sb_name
 FROM Equipment
 LEFT OUTER JOIN SkillLevel AS sk_lvl1 ON Equipment.skill_level_1 = sk_lvl1.id
 LEFT OUTER JOIN SkillLevel AS sk_lvl2 ON Equipment.skill_level_2 = sk_lvl2.id
